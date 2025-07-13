@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: order-consumer
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orderdb
+    username: postgres
+    password: quanghieu
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    bootstrap-servers: localhost:9092  # tên service kafka
+
+    consumer:
+      group-id: order-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.example.order_consumer.entity"
+        # Hoặc bạn dùng trusted tất cả: "*"
+        # spring.json.trusted.packages: "*"
+        spring.json.value.default.type: "com.example.order_consumer.entity.Order"
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+server:
+  port: 8084          # Thay đổi port thành 8084
+  address: 0.0.0.0

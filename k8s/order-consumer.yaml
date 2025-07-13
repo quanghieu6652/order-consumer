@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-consumer
+  template:
+    metadata:
+      labels:
+        app: order-consumer
+    spec:
+      containers:
+        - name: order-consumer
+          image: quanghieu6652/order-consumer:1  # 👉 nhớ build & push image này
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8084
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://my-postgres-postgresql:5432/orderdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: quanghieu  # 👉 bạn nên đưa vào Secret sau
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: my-kafka:9092
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-consumer
+spec:
+  selector:
+    app: order-consumer
+  ports:
+    - protocol: TCP
+      port: 8084
+      targetPort: 8084
+  type: ClusterIP

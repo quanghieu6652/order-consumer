@@ -1,0 +1,21 @@
+
+services:
+  order-consumer:
+    image: quanghieu/order-consumer:latest
+    ports:
+      - "8084:8084"
+    networks:
+      order-service-network:
+        external: true
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://order-service-postgres-1:5432/orderdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: quanghieu
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+
+networks:
+  order-service-network:
+    external: true
