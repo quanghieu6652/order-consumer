@@ -7,14 +7,11 @@ pipeline {
         DOCKER_CREDS = 'dockerhub-cred-id'
         K8S_NAMESPACE = 'default'
     }
-
     options {
-        ansiColor('xterm')
         skipDefaultCheckout()
         timestamps()
         disableConcurrentBuilds()
     }
-
     stages {
         stage('Build') {
             steps {
