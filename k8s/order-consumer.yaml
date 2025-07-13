@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: order-consumer
-          image: quanghieu6652/order-consumer:1  # 👉 nhớ build & push image này
+          image: quanghieu6652/order-consumer:8
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8084
@@ -24,7 +24,10 @@ spec:
             - name: SPRING_DATASOURCE_USERNAME
               value: postgres
             - name: SPRING_DATASOURCE_PASSWORD
-              value: quanghieu  # 👉 bạn nên đưa vào Secret sau
+              valueFrom:
+                secretKeyRef:
+                  name: my-postgres-postgresql
+                  key: postgres-password
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
               value: my-kafka:9092
 ---
